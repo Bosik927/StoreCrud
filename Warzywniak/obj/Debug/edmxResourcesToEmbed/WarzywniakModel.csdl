@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WarzywniakModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Adress">
+    <Key>
+      <PropertyRef Name="AdressId" />
+    </Key>
+    <Property Name="AdressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoadName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="HouseNumber" Type="Int32" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="RowVersion" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <NavigationProperty Name="User" Relationship="Self.FK__Adresses__UserId__3F466844" FromRole="Adresses" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="OrderProduct">
+    <Key>
+      <PropertyRef Name="OrderProductId" />
+    </Key>
+    <Property Name="OrderProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductId" Type="Int32" />
+    <Property Name="OrderId" Type="Int32" />
+    <Property Name="Quantity" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="RowVersion" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <NavigationProperty Name="Order" Relationship="Self.FK__OrderProd__Order__46E78A0C" FromRole="OrderProduct" ToRole="Orders" />
+    <NavigationProperty Name="Product" Relationship="Self.FK__OrderProd__Produ__45F365D3" FromRole="OrderProduct" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="OrdareDate" Type="DateTime" Precision="0" />
+    <Property Name="Realized" Type="Boolean" />
+    <Property Name="RowVersion" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <NavigationProperty Name="OrderProducts" Relationship="Self.FK__OrderProd__Order__46E78A0C" FromRole="Orders" ToRole="OrderProduct" />
+    <NavigationProperty Name="User" Relationship="Self.FK__Orders__UserId__4222D4EF" FromRole="Orders" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="String" MaxLength="69" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProductPrice" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="ProductUnit" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Vat" Type="Int32" Nullable="false" />
+    <Property Name="ForDelete" Type="Boolean" />
+    <Property Name="RowVersion" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <NavigationProperty Name="OrderProducts" Relationship="Self.FK__OrderProd__Produ__45F365D3" FromRole="Products" ToRole="OrderProduct" />
+    <NavigationProperty Name="Warehouses" Relationship="Self.FK__Warehouse__Produ__49C3F6B7" FromRole="Products" ToRole="Warehouse" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nick" Type="String" MaxLength="69" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="69" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PhoneNumber" Type="Int32" Nullable="false" />
+    <Property Name="EmailAddress" Type="String" MaxLength="69" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ForDelete" Type="Boolean" />
+    <Property Name="RowVersion" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <NavigationProperty Name="Adresses" Relationship="Self.FK__Adresses__UserId__3F466844" FromRole="Users" ToRole="Adresses" />
+    <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__UserId__4222D4EF" FromRole="Users" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="Warehouse">
+    <Key>
+      <PropertyRef Name="WarehouseId" />
+    </Key>
+    <Property Name="WarehouseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductId" Type="Int32" />
+    <Property Name="ExpiryDate" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Quantity" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+    <Property Name="RowVersion" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+    <NavigationProperty Name="Product" Relationship="Self.FK__Warehouse__Produ__49C3F6B7" FromRole="Warehouse" ToRole="Products" />
+  </EntityType>
+  <Association Name="FK__Adresses__UserId__3F466844">
+    <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Adresses" Type="Self.Adress" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Adresses">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderProd__Order__46E78A0C">
+    <End Role="Orders" Type="Self.Order" Multiplicity="0..1" />
+    <End Role="OrderProduct" Type="Self.OrderProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="OrderId" />
+      </Principal>
+      <Dependent Role="OrderProduct">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderProd__Produ__45F365D3">
+    <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="OrderProduct" Type="Self.OrderProduct" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductId" />
+      </Principal>
+      <Dependent Role="OrderProduct">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Orders__UserId__4222D4EF">
+    <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Warehouse__Produ__49C3F6B7">
+    <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductId" />
+      </Principal>
+      <Dependent Role="Warehouse">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="WarzywniakEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Adresses" EntityType="Self.Adress" />
+    <EntitySet Name="OrderProducts" EntityType="Self.OrderProduct" />
+    <EntitySet Name="Orders" EntityType="Self.Order" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <EntitySet Name="Warehouses" EntityType="Self.Warehouse" />
+    <AssociationSet Name="FK__Adresses__UserId__3F466844" Association="Self.FK__Adresses__UserId__3F466844">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Adresses" EntitySet="Adresses" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderProd__Order__46E78A0C" Association="Self.FK__OrderProd__Order__46E78A0C">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrderProduct" EntitySet="OrderProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderProd__Produ__45F365D3" Association="Self.FK__OrderProd__Produ__45F365D3">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="OrderProduct" EntitySet="OrderProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Orders__UserId__4222D4EF" Association="Self.FK__Orders__UserId__4222D4EF">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Warehouse__Produ__49C3F6B7" Association="Self.FK__Warehouse__Produ__49C3F6B7">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="Warehouse" EntitySet="Warehouses" />
+    </AssociationSet>
+    <FunctionImport Name="DailyExceededExpiryDate" />
+    <FunctionImport Name="GetAllOrdersValueForUserId" ReturnType="Collection(Decimal)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="GetAllProductsForUserId" ReturnType="Collection(WarzywniakModel.GetAllProductsForUserId_Result)">
+      <Parameter Name="UserId" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="GetAllProductsForUserId_Result">
+    <Property Type="String" Name="ProductName" Nullable="false" MaxLength="69" />
+    <Property Type="Decimal" Name="ProductPrice" Nullable="false" Precision="18" Scale="0" />
+    <Property Type="String" Name="ProductUnit" Nullable="false" MaxLength="10" />
+    <Property Type="Decimal" Name="Quantity" Nullable="false" Precision="18" Scale="0" />
+  </ComplexType>
+</Schema>

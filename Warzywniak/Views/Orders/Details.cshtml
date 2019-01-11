@@ -1,0 +1,50 @@
+﻿@model Warzywniak.Order
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.OrdareDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrdareDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Realized)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Realized)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RowVersion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RowVersion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Nick)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Nick)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OrderId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

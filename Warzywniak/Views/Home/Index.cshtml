@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1 align="center">Main Management Panel</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <h1 align="center">Wavehouse</h1>
+        <p>
+            A model that allows you to view and manage products on stock. It contains information about the products, their expiration dates and the individual quantity.
+        </p>
+        <p><a class="btn btn-info btn-lg btn-block" href="@Url.Action("Index", "Warehouses")">Wavehouse &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Products</h2>
+        <p>
+            A model that allows you to view and manage products that can be bought.
+        </p>
+        <p><a class="btn btn-info" href="@Url.Action("Index", "Products")">Products &raquo;</a></p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <h2>Orders</h2>
+        <p>
+            Model umożliwiający podgląd i zarządzanie zamówieniami.
+        </p>
+        <p><a class="btn btn-info" href="@Url.Action("Index", "Orders")">Orders &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Users</h2>
+        <p>
+            A model that allows viewing and managing store users.
+        </p>
+        <p><a class="btn btn-info" href="@Url.Action("Index", "Users")">Users &raquo;</a></p>
+    </div>
+</div>
