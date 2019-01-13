@@ -26,13 +26,7 @@
             @Html.DisplayFor(model => model.Realized)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.RowVersion)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.RowVersion)
-        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.User.Nick)
@@ -43,6 +37,35 @@
         </dd>
 
     </dl>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Product name")
+            </th>
+            <th>
+                @Html.DisplayName("Quantity")
+            </th>
+            <th>
+                @Html.DisplayName("Price")
+            </th>
+        </tr>
+
+        @foreach (var item in Model.OrderProducts)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.ProductPrice)
+            </td>
+        </tr>
+        }
+    </table>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.OrderId }) |

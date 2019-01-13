@@ -18,8 +18,11 @@ namespace Warzywniak.Controllers
         public ActionResult Index()
         {
             var orders = db.Orders.Include(o => o.User);
+            orders = orders.OrderBy(o => o.User.Nick);//sortowanie
+            //trzeba sparametryzować metode
             return View(orders.ToList());
         }
+
 
         // GET: Orders/Details/5
         public ActionResult Details(int? id)
@@ -29,6 +32,7 @@ namespace Warzywniak.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Order order = db.Orders.Find(id);
+            
             if (order == null)
             {
                 return HttpNotFound();
@@ -42,6 +46,8 @@ namespace Warzywniak.Controllers
             ViewBag.UserId = new SelectList(db.Users, "UserId", "Nick");
             return View();
         }
+
+
 
         // POST: Orders/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
