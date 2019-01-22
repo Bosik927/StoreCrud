@@ -14,10 +14,14 @@ namespace Warzywniak.Controllers
     {
         private WarzywniakEntities db = new WarzywniakEntities();
 
-        // GET: Users
+        // GET: Users, only not deleted
         public ActionResult Index()
         {
-            return View(db.Users.ToList());
+            var users = from user in db.Users
+                        where user.ForDelete == false
+                                       select user;
+         
+            return View(users);
         }
 
         // GET: Users/Details/5
@@ -28,11 +32,14 @@ namespace Warzywniak.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             User user = db.Users.Find(id);
+            Adress adress = db.Adresses.FirstOrDefault(adr => adr.UserId == id);
+
+            UserAdress userAddres = new UserAdress(user, adress);
             if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(userAddres);
         }
 
         // GET: Users/Create
@@ -46,12 +53,19 @@ namespace Warzywniak.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserId,Nick,Password,PhoneNumber,EmailAddress,ForDelete,RowVersion")] User user)
+        public ActionResult Create([Bind(Include = "UserId,Nick,Password,PhoneNumber,EmailAddress")] User user,
+            [Bind(Include = "UserId,RoadName,HouseNumber")] Adress adress)
         {
             if (ModelState.IsValid)
             {
+                user.ForDelete = false;
                 db.Users.Add(user);
                 db.SaveChanges();
+
+                adress.User = user;
+                db.Adresses.Add(adress);
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
@@ -66,11 +80,14 @@ namespace Warzywniak.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             User user = db.Users.Find(id);
+            Adress adress = db.Adresses.FirstOrDefault(adr => adr.UserId == id);
+
+            UserAdress userAddres = new UserAdress(user, adress);
             if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(userAddres);
         }
 
         // POST: Users/Edit/5
@@ -78,11 +95,16 @@ namespace Warzywniak.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserId,Nick,Password,PhoneNumber,EmailAddress,ForDelete,RowVersion")] User user)
+        public ActionResult Edit([Bind(Include = "UserId,Nick,Password,PhoneNumber,EmailAddress,ForDelete")] User user,
+            [Bind(Include = "AdressId,RoadName,HouseNumber,UserId")] Adress adress)
         {
             if (ModelState.IsValid)
             {
+                user.ForDelete = false;
                 db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+
+                db.Entry(adress).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -114,6 +136,45 @@ namespace Warzywniak.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        public ActionResult ShowAllOrders(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            User user = db.Users.Find(id);
+
+            var ordersIds = (from or in db.Orders
+                             where or.UserId == id
+                             select new { or.OrderId, or.OrdareDate }).Distinct().ToList();
+
+            if (ordersIds == null)
+            {
+                return HttpNotFound();
+            }
+
+            List<OrderEntity> orderEntities = new List<OrderEntity>();
+            foreach (var orderId in ordersIds)
+            {
+                var entryPoint = (from or in db.Orders
+                                  join op in db.OrderProducts on or.OrderId equals op.OrderId
+                                  join pr in db.Products on op.ProductId equals pr.ProductId
+                                  where or.OrderId == orderId.OrderId
+                                  select new ProductEntity
+                                  {
+                                      ProductName = pr.ProductName,
+                                      Quantity = op.Quantity,
+                                      ProductUnit = pr.ProductUnit,
+                                      Vat = pr.Vat,
+                                      ProductPrice = pr.ProductPrice,
+                                  }).ToList();
+                orderEntities.Add(new OrderEntity(orderId.OrderId, entryPoint, orderId.OrdareDate.Value));
+            }
+
+            return View(orderEntities);
+        }
+
 
         protected override void Dispose(bool disposing)
         {

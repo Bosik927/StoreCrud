@@ -34,4 +34,17 @@ namespace Warzywniak
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
     }
+
+    public class UserAdress
+    {
+        public User user { get; set; }
+        public Adress adress { get; set; }
+
+        public UserAdress(User user, Adress adress)
+        {
+            this.user = user;
+            this.adress = adress;
+        }
+
+    }
 }

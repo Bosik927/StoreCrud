@@ -1,66 +1,65 @@
-﻿@model Warzywniak.User
+﻿@model Warzywniak.UserAdress
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>User Details</h2>
 
 <div>
-    <h4>User</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Nick)
+            @Html.DisplayNameFor(model => model.user.Nick)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Nick)
+            @Html.DisplayFor(model => model.user.Nick)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Password)
+            @Html.DisplayNameFor(model => model.user.Password)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Password)
+            @Html.DisplayFor(model => model.user.Password)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
+            @Html.DisplayNameFor(model => model.user.PhoneNumber)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
+            @Html.DisplayFor(model => model.user.PhoneNumber)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EmailAddress)
+            @Html.DisplayNameFor(model => model.user.EmailAddress)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EmailAddress)
+            @Html.DisplayFor(model => model.user.EmailAddress)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ForDelete)
+            @Html.DisplayNameFor(model => model.adress.RoadName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ForDelete)
+            @Html.DisplayFor(model => model.adress.RoadName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.RowVersion)
+            @Html.DisplayNameFor(model => model.adress.HouseNumber)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.RowVersion)
+            @Html.DisplayFor(model => model.adress.HouseNumber)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.user.UserId }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

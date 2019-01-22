@@ -30,4 +30,18 @@ namespace Warzywniak
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }
         public virtual User User { get; set; }
     }
+
+    public partial class OrderEntity
+    {
+        public int OrderId { get; set; }
+        public List<ProductEntity> products { get; set; }
+        public DateTime OrderDate { get; set; }
+
+        public OrderEntity(int OrderId, List<ProductEntity> products, DateTime OrderDate)
+        {
+            this.OrderId = OrderId;
+            this.products = products;
+            this.OrderDate = OrderDate;
+        }
+    }
 }
