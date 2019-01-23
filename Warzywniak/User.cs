@@ -25,7 +25,8 @@ namespace Warzywniak
         public int UserId { get; set; }
         public string Nick { get; set; }
         public string Password { get; set; }
-        [RegularExpression("[0-9]{1,10}", ErrorMessage = "Wrong phone number length! Min 1 number, max 10 numbers!")]
+        [MinLength(3, ErrorMessage = "Wrong phone number length! Min 1 number, max 10 numbers!")]
+        [Required(ErrorMessage = "Phone number cannot be empty!")]
         public int PhoneNumber { get; set; }
         [RegularExpression(".+[@].+\\.com", ErrorMessage = "Wrong email format! Needed format like: something@something.com!")]
         public string EmailAddress { get; set; }

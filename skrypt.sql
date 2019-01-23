@@ -280,6 +280,24 @@ begin
 end;
 GO
 
+
+CREATE TRIGGER  CannotAddRepitedUserName
+ON Users
+AFTER INSERT
+AS
+BEGIN
+   IF EXISTS (
+      SELECT 1
+      FROM inserted
+      WHERE Nick in(Select Distinct Nick from Users)
+   )
+   BEGIN
+      ROLLBACK TRANSACTION
+	  RAISERROR ('Cannot create user with this name.' ,16,1)
+   END 
+END
+GO
+
 --delete from Users where UserId=4
 --select * from Users
 --delete from Products where ProductId=9
