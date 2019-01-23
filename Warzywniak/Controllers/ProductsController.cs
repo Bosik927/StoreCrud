@@ -46,10 +46,11 @@ namespace Warzywniak.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,ProductName,ProductPrice,ProductUnit,Vat,ForDelete,RowVersion")] Product product)
+        public ActionResult Create([Bind(Include = "ProductId,ProductName,ProductPrice,ProductUnit,Vat,RowVersion")] Product product)
         {
             if (ModelState.IsValid)
             {
+	            product.ForDelete = false;
                 db.Products.Add(product);
                 db.SaveChanges();
                 return RedirectToAction("Index");
