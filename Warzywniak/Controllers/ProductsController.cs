@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -41,14 +42,14 @@ namespace Warzywniak.Controllers
             return View();
         }
 
-        // POST: Products/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,ProductName,ProductPrice,ProductUnit,Vat,ForDelete,RowVersion")] Product product)
+		// POST: Products/Create
+		// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Create([Bind(Include = "ProductId,ProductName,ProductPrice,ProductUnit,Vat,ForDelete,RowVersion")] Product product)
         {
-            if (ModelState.IsValid)
+			if (ModelState.IsValid)
             {
                 db.Products.Add(product);
                 db.SaveChanges();
