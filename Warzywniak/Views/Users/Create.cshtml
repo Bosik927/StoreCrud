@@ -11,6 +11,12 @@
 {
     @Html.AntiForgeryToken()
 
+    if (@ViewBag.Comunicate != null)
+    {
+        <label>Problem :</label> @ViewBag.Comunicate
+    }
+
+
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })

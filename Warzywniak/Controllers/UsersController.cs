@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Warzywniak;
 
+
 namespace Warzywniak.Controllers
 {
+    [HandleError(View = "Error")]
     public class UsersController : Controller
     {
         private WarzywniakEntities db = new WarzywniakEntities();
@@ -19,8 +22,8 @@ namespace Warzywniak.Controllers
         {
             var users = from user in db.Users
                         where user.ForDelete == false
-                                       select user;
-         
+                        select user;
+
             return View(users);
         }
 
@@ -56,19 +59,39 @@ namespace Warzywniak.Controllers
         public ActionResult Create([Bind(Include = "UserId,Nick,Password,PhoneNumber,EmailAddress")] User user,
             [Bind(Include = "UserId,RoadName,HouseNumber")] Adress adress)
         {
-            if (ModelState.IsValid)
+            ViewBag.Comunicate = null;
+            try
             {
-                user.ForDelete = false;
-                db.Users.Add(user);
-                db.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    user.ForDelete = false;
+                    db.Users.Add(user);
+                    db.SaveChanges();
 
-                adress.User = user;
-                db.Adresses.Add(adress);
-                db.SaveChanges();
-
-                return RedirectToAction("Index");
+                    adress.User = user;
+                    db.Adresses.Add(adress);
+                    db.SaveChanges();
+                }
+                else
+                {
+                   throw new ArgumentException("Invalid arguments!");
+                }
             }
-
+            catch (ArgumentException e)
+            {
+                ViewBag.Comunicate = e.Message;
+                return View();
+            }
+            catch (DataException e)
+            {
+                ViewBag.Comunicate = e.InnerException.InnerException.Message;
+                return View();
+            }
+            catch (Exception e)
+            {
+                ViewBag.Comunicate = e.Message;
+                return View();
+            }
             return View(user);
         }
 
@@ -174,7 +197,6 @@ namespace Warzywniak.Controllers
 
             return View(orderEntities);
         }
-
 
         protected override void Dispose(bool disposing)
         {
