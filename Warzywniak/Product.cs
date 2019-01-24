@@ -30,7 +30,6 @@ namespace Warzywniak
         public string ProductUnit { get; set; }
 		[RegularExpression("5|8|23",ErrorMessage = "Vat rate must be 5, 8 or 23")]
         public int Vat { get; set; }
-	    [Required]
         public Nullable<bool> ForDelete { get; set; }
         public byte[] RowVersion { get; set; }
     
