@@ -10,7 +10,10 @@
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
-    
+	if (@ViewBag.Comunicate != null)
+	{
+		<label>Problem :</label> @ViewBag.Comunicate
+	}
     <div class="form-horizontal">
         <h4>Warehouse</h4>
         <hr />

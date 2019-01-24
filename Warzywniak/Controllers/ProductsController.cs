@@ -105,11 +105,34 @@ namespace Warzywniak.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Edit([Bind(Include = "ProductId,ProductName,ProductPrice,ProductUnit,Vat,ForDelete,RowVersion")] Product product)
 		{
-			if (ModelState.IsValid)
+			ViewBag.Comunicate = null;
+			try
+			{
+				if (ModelState.IsValid)
 			{
 				db.Entry(product).State = EntityState.Modified;
 				db.SaveChanges();
 				return RedirectToAction("Index");
+			}
+				else
+				{
+					throw new ArgumentException("Invalid arguments!");
+				}
+			}
+			catch (ArgumentException e)
+			{
+				ViewBag.Comunicate = e.Message;
+				return View();
+			}
+			catch (DataException e)
+			{
+				ViewBag.Comunicate = e.InnerException.InnerException.Message;
+				return View();
+			}
+			catch (Exception e)
+			{
+				ViewBag.Comunicate = e.Message;
+				return View();
 			}
 			return View(product);
 		}
