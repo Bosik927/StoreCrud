@@ -281,28 +281,65 @@ end;
 GO
 
 
-CREATE TRIGGER  CannotAddRepitedUserName
+CREATE TRIGGER  CannotAddRepitedUser
 ON Users
-AFTER INSERT
+INSTEAD OF INSERT
 AS
 BEGIN
    IF EXISTS (
-      SELECT 1
-      FROM inserted
-      WHERE Nick in(Select Distinct Nick from Users)
+      SELECT *
+      FROM inserted i
+      WHERE i.Nick in(Select Distinct Nick from Users)
    )
    BEGIN
       ROLLBACK TRANSACTION
 	  RAISERROR ('Cannot create user with this name.' ,16,1)
    END 
+   ELSE IF EXISTS (
+      SELECT *
+      FROM inserted i
+      WHERE i.EmailAddress in(Select Distinct EmailAddress from Users)
+   )
+   BEGIN
+      ROLLBACK TRANSACTION
+	  RAISERROR ('User with this email already exist.' ,16,1)
+   END 
+   ELSE IF EXISTS (
+      SELECT *
+      FROM inserted i
+      WHERE i.PhoneNumber in(Select Distinct PhoneNumber from Users)
+   )
+   BEGIN
+      ROLLBACK TRANSACTION
+	  RAISERROR ('User with this phone number already exist.' ,16,1)
+   END 
+   ELSE
+	BEGIN
+		INSERT INTO Users(Nick,Password,PhoneNumber,EmailAddress) 
+			Select i.Nick, i.Password, i.PhoneNumber, i.EmailAddress From inserted i
+   END
 END
 GO
 
---delete from Users where UserId=4
---select * from Users
---delete from Products where ProductId=9
---select * from Products
---select * from OrderProduct
---update Users set ForDelete=1 where UserId=4
---select * from Users
---exec DailyExceededExpiryDate
+
+CREATE TRIGGER  CannotAddRepitedProductName
+ON Products
+INSTEAD OF INSERT
+AS
+BEGIN
+   IF EXISTS (
+      SELECT *
+      FROM inserted i
+      WHERE i.ProductName in (Select Distinct ProductName from Products)
+   )
+   BEGIN
+      ROLLBACK TRANSACTION
+	  RAISERROR ('Product with this name already exist.' ,16,1);
+   END 
+	ELSE
+	BEGIN
+		INSERT INTO Products(ProductName, ProductPrice, ProductUnit, Vat) 
+			Select i.ProductName, i.ProductPrice, i.ProductUnit, i.Vat From inserted i;
+   END
+END
+GO
