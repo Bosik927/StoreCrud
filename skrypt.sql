@@ -38,7 +38,7 @@ Password varchar(69) not null,
 PhoneNumber int not null,
 EmailAddress varchar(69) not null,
 ForDelete bit default(0),
-RowVersion timestamp
+RowVersion timestamp default CURRENT_TIMESTAMP
 );
 
 INSERT INTO Users(Nick,Password,PhoneNumber,EmailAddress) VALUES
@@ -342,4 +342,31 @@ BEGIN
 			Select i.ProductName, i.ProductPrice, i.ProductUnit, i.Vat From inserted i;
    END
 END
+GO
+
+CREATE PROCEDURE SaleSummary
+@BeginDate DATE,
+@EndDate DATE
+as
+begin 
+	select p.ProductName, sum(op.Quantity) Quantity, sum(Quantity*p.ProductPrice) Price from Products p
+	join OrderProduct op on op.ProductId=p.ProductId
+	join Orders o on o.OrderId=op.OrderId
+	where o.OrdareDate between @BeginDate and @EndDate
+	group by p.ProductName
+end
+GO
+
+CREATE PROCEDURE SaleSummaryRealized
+@BeginDate DATE,
+@EndDate DATE
+as
+begin 
+	select p.ProductName, sum(op.Quantity) Quantity, sum(Quantity*p.ProductPrice) Price from Products p
+	join OrderProduct op on op.ProductId=p.ProductId
+	join Orders o on o.OrderId=op.OrderId
+	where (o.OrdareDate between @BeginDate and @EndDate)
+	and o.Realized=1
+	group by p.ProductName
+end
 GO
