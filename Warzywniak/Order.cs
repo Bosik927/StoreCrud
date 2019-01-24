@@ -22,6 +22,8 @@ namespace Warzywniak
 
         public int OrderId { get; set; }
         public Nullable<int> UserId { get; set; }
+	    [DataType(DataType.Date)]
+	    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> OrdareDate { get; set; }
         public Nullable<bool> Realized { get; set; }
         public byte[] RowVersion { get; set; }
