@@ -23,12 +23,13 @@ namespace Warzywniak
         }
     
         public int UserId { get; set; }
+        [Required(ErrorMessage = "Nick cannot be empty!")]
         public string Nick { get; set; }
+        [Required(ErrorMessage = "Password cannot be empty!")]
         public string Password { get; set; }
-        [MinLength(3, ErrorMessage = "Wrong phone number length! Min 1 number, max 10 numbers!")]
         [Required(ErrorMessage = "Phone number cannot be empty!")]
         public int PhoneNumber { get; set; }
-        [RegularExpression(".+[@].+\\.com", ErrorMessage = "Wrong email format! Needed format like: something@something.com!")]
+        [RegularExpression(".+[@].+\\.(com|pl)", ErrorMessage = "Wrong email format! Needed format like: something@something.com! Avaliable extension: pl, com")]
         public string EmailAddress { get; set; }
         public Nullable<bool> ForDelete { get; set; }
         public byte[] RowVersion { get; set; }

@@ -11,7 +11,7 @@ namespace Warzywniak
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Order
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,13 +19,13 @@ namespace Warzywniak
         {
             this.OrderProducts = new HashSet<OrderProduct>();
         }
-    
+
         public int OrderId { get; set; }
         public Nullable<int> UserId { get; set; }
         public Nullable<System.DateTime> OrdareDate { get; set; }
         public Nullable<bool> Realized { get; set; }
         public byte[] RowVersion { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }
         public virtual User User { get; set; }
@@ -36,12 +36,26 @@ namespace Warzywniak
         public int OrderId { get; set; }
         public List<ProductEntity> products { get; set; }
         public DateTime OrderDate { get; set; }
+        public decimal fullPrice { get; set; }
 
-        public OrderEntity(int OrderId, List<ProductEntity> products, DateTime OrderDate)
+        public OrderEntity(int OrderId, List<ProductEntity> products, DateTime OrderDate, decimal fullPrice)
         {
             this.OrderId = OrderId;
             this.products = products;
             this.OrderDate = OrderDate;
+            this.fullPrice = fullPrice;
         }
     }
+    public partial class FullOrderEntity
+    {
+        List<OrderEntity> OrderEntities { get; set; }
+        public decimal fullOrdersPrice { get; set; }
+
+        public FullOrderEntity(List<OrderEntity> OrderEntities , decimal fullOrders)
+        {
+            this.OrderEntities = OrderEntities;
+            this.fullOrdersPrice = fullOrders;
+        }
+    }
+
 }

@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "ShowAllOrders";
 }
-
 <h2>ShowAllOrders</h2>
 
 <table class="table">
@@ -24,8 +23,11 @@
             <td>
                 <strong>  @Html.DisplayFor(modelItem => item.OrderDate)</strong>
             </td>
+            <td></td>
+            <td></td>
+            <td></td>
+
         </tr>
-        <br />
 
         <td>
             Product Name
@@ -44,7 +46,6 @@
         </td>
         foreach (var product in item.products)
         {
-
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => product.ProductName)
@@ -64,19 +65,20 @@
 
             </tr>
 
-            @*<td>
-                    @Html.DisplayFor(modelItem => product.ProductPrice)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => product.ProductName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => product.ProductPrice)
-                </td>*@
         }
+
+            <tr>
+                <td>
+                Full Order value: 
+                </td>
+                <td>
+                    <strong> @Html.DisplayFor(modelItem => item.fullPrice)</strong>
+                </td>
+            </tr>
+
     }
 </table>
+
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>

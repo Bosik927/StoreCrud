@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -12,7 +13,6 @@ using Warzywniak;
 
 namespace Warzywniak.Controllers
 {
-    [HandleError(View = "Error")]
     public class UsersController : Controller
     {
         private WarzywniakEntities db = new WarzywniakEntities();
@@ -82,6 +82,11 @@ namespace Warzywniak.Controllers
                 ViewBag.Comunicate = e.Message;
                 return View();
             }
+            catch (DbUpdateConcurrencyException e)
+            {
+                ViewBag.Comunicate = "Concurrnet exception occur!";
+                return View();
+            }
             catch (DataException e)
             {
                 ViewBag.Comunicate = e.InnerException.InnerException.Message;
@@ -92,7 +97,7 @@ namespace Warzywniak.Controllers
                 ViewBag.Comunicate = e.Message;
                 return View();
             }
-            return View(user);
+            return RedirectToAction("Index");
         }
 
         // GET: Users/Edit/5
@@ -118,20 +123,40 @@ namespace Warzywniak.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserId,Nick,Password,PhoneNumber,EmailAddress,ForDelete")] User user,
+        public ActionResult Edit([Bind(Include = "UserId,Nick,Password,PhoneNumber,EmailAddress,ForDelete, RowVersion")] User user,
             [Bind(Include = "AdressId,RoadName,HouseNumber,UserId")] Adress adress)
         {
-            if (ModelState.IsValid)
-            {
-                user.ForDelete = false;
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
+            ViewBag.Comunicate = null;
+            user.ForDelete = false;
+            try
+            { 
+                if (ModelState.IsValid)
+                {
+                    user.ForDelete = false;
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
 
-                db.Entry(adress).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                    db.Entry(adress).State = EntityState.Modified;
+                    db.SaveChanges();
+                    
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid arguments!");
+                }
             }
-            return View(user);
+            catch (DbUpdateConcurrencyException e)
+            {
+                ViewBag.Comunicate = "Concurrnet exception occur!";
+                return View();
+            }
+            catch (Exception e)
+            {
+                ViewBag.Comunicate = "Unknown error!";
+                return View();
+            }
+
+            return RedirectToAction("Index");
         }
 
         // GET: Users/Delete/5
@@ -178,6 +203,7 @@ namespace Warzywniak.Controllers
             }
 
             List<OrderEntity> orderEntities = new List<OrderEntity>();
+            decimal fullSum = 0;
             foreach (var orderId in ordersIds)
             {
                 var entryPoint = (from or in db.Orders
@@ -192,8 +218,28 @@ namespace Warzywniak.Controllers
                                       Vat = pr.Vat,
                                       ProductPrice = pr.ProductPrice,
                                   }).ToList();
-                orderEntities.Add(new OrderEntity(orderId.OrderId, entryPoint, orderId.OrdareDate.Value));
+
+                var query = from op in db.OrderProducts
+                            join p in db.Products on op.ProductId equals p.ProductId
+                            where op.OrderId.Value == orderId.OrderId
+                            select new
+                            {
+                                Price = p.ProductPrice,
+                                Quantity = op.Quantity
+                            };
+
+                decimal sum = 0;
+                foreach(var q in query)
+                {
+                    sum += q.Price * q.Quantity;
+                }
+                           
+                orderEntities.Add(new OrderEntity(orderId.OrderId, entryPoint, orderId.OrdareDate.Value,sum));
+                fullSum += sum;
             }
+
+
+            //FullOrderEntity fullOrderEntity = new FullOrderEntity(orderEntities, fullSum);
 
             return View(orderEntities);
         }

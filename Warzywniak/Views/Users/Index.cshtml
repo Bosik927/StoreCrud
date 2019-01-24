@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Panel Użytkowników</h2>
+<h2>User Panel</h2>
 
 <p>
     @Html.ActionLink("Add new User", "Create")
@@ -45,7 +45,7 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
                 @Html.ActionLink("Details", "Details", new { id = item.UserId }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.UserId })  |
-                @Html.ActionLink("How all ordered products", "ShowAllOrders", new { id = item.UserId })
+                @Html.ActionLink("Orders report", "ShowAllOrders", new { id = item.UserId })
             </td>
         </tr>
     }
