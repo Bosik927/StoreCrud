@@ -67,6 +67,41 @@ namespace Warzywniak.Controllers
             return View(order);
         }
 
+	   // [HttpPost]
+	   // [ValidateAntiForgeryToken]
+		public ActionResult AddProducts(int? id)
+	    {
+		    if (id == null)
+		    {
+			    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+		    }
+			OrderProduct orderProduct = new OrderProduct();
+		    orderProduct.OrderId = id.Value;
+		    if (orderProduct == null)
+		    {
+			    return HttpNotFound();
+		    }
+			ViewBag.ProductId = new SelectList(db.Products, "ProductId", "ProductName");
+			return View(orderProduct);
+	    }
+	    [HttpPost]
+	    [ValidateAntiForgeryToken]
+	    public ActionResult AddProducts([Bind(Include = "OrderProductId,ProductId,OrderId,Quantity,RowVersion")] OrderProduct orderProduct)
+	    {
+
+			if (ModelState.IsValid)
+		    {
+			    db.OrderProducts.Add(orderProduct);
+			    db.SaveChanges();
+			    return RedirectToAction("Index");
+		    }
+
+		    ViewBag.OrderId = new SelectList(db.Orders, "OrderId", "OrderId", orderProduct.OrderId);
+		    ViewBag.ProductId = new SelectList(db.Products, "ProductId", "ProductName", orderProduct.ProductId);
+		    return View(orderProduct);
+		}
+
+
         // GET: Orders/Edit/5
         public ActionResult Edit(int? id)
         {
