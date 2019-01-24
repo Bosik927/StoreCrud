@@ -55,7 +55,7 @@ begin
 	if(@expdate < GETDATE())
 	begin 
 		rollback;
-		raiserror('*** DATA WA¯NOŒCI ZOSTA£A PRZEKROCZONA ***',16,1);
+		raiserror('*** DATA WAÂ¯NOÅ’CI ZOSTAÂ£A PRZEKROCZONA ***',16,1);
 
 	end
 end
@@ -76,7 +76,7 @@ begin
 	if(@quantity > @quantityWH)
 	begin 
 		rollback;
-		raiserror('*** BRAK WYSTARCZAJ¥CEJ ILOŒCI TOWARU W MAGAZYNIE ***',16,1);
+		raiserror('*** BRAK WYSTARCZAJÂ¥CEJ ILOÅ’CI TOWARU W MAGAZYNIE ***',16,1);
 
 	end
 end
@@ -183,6 +183,33 @@ END
 GO
 
 CREATE PROCEDURE SaleSummary
+@BeginDate DATE,
+@EndDate DATE
+as
+begin 
+	select p.ProductName, sum(op.Quantity) Quantity, sum(Quantity*p.ProductPrice) Price from Products p
+	join OrderProduct op on op.ProductId=p.ProductId
+	join Orders o on o.OrderId=op.OrderId
+	where o.OrdareDate between @BeginDate and @EndDate
+	group by p.ProductName
+end
+GO
+
+CREATE PROCEDURE SaleSummaryRealized
+@BeginDate DATE,
+@EndDate DATE
+as
+begin 
+	select p.ProductName, sum(op.Quantity) Quantity, sum(Quantity*p.ProductPrice) Price from Products p
+	join OrderProduct op on op.ProductId=p.ProductId
+	join Orders o on o.OrderId=op.OrderId
+	where (o.OrdareDate between @BeginDate and @EndDate)
+	and o.Realized=1
+	group by p.ProductName
+end
+GO
+	   
+	   CREATE PROCEDURE SaleSummary
 @BeginDate DATE,
 @EndDate DATE
 as
