@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+using System.Web.UI.WebControls;
 namespace Warzywniak
 {
     using System;
@@ -24,7 +26,9 @@ namespace Warzywniak
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public decimal ProductPrice { get; set; }
+		[Required]
         public string ProductUnit { get; set; }
+		[RegularExpression("5|8|23",ErrorMessage = "Vat rate must be 5, 8 or 23")]
         public int Vat { get; set; }
         public Nullable<bool> ForDelete { get; set; }
         public byte[] RowVersion { get; set; }
@@ -42,5 +46,11 @@ namespace Warzywniak
         public string ProductUnit { get; set; }
         public int Vat { get; set; }
         public Decimal ProductPrice { get; set; }
+    }
+	public enum ProductUnit
+	{
+		kilogram,
+		litr,
+		sztuka
     }
 }
