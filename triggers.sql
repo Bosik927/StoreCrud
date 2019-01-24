@@ -181,3 +181,30 @@ BEGIN
    END
 END
 GO
+
+CREATE PROCEDURE SaleSummary
+@BeginDate DATE,
+@EndDate DATE
+as
+begin 
+	select p.ProductName, sum(op.Quantity) Quantity, sum(Quantity*p.ProductPrice) Price from Products p
+	join OrderProduct op on op.ProductId=p.ProductId
+	join Orders o on o.OrderId=op.OrderId
+	where o.OrdareDate between @BeginDate and @EndDate
+	group by p.ProductName
+end
+GO
+
+CREATE PROCEDURE SaleSummaryRealized
+@BeginDate DATE,
+@EndDate DATE
+as
+begin 
+	select p.ProductName, sum(op.Quantity) Quantity, sum(Quantity*p.ProductPrice) Price from Products p
+	join OrderProduct op on op.ProductId=p.ProductId
+	join Orders o on o.OrderId=op.OrderId
+	where (o.OrdareDate between @BeginDate and @EndDate)
+	and o.Realized=1
+	group by p.ProductName
+end
+GO
