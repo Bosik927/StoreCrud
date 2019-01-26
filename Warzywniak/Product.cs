@@ -13,7 +13,7 @@ namespace Warzywniak
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,17 +22,17 @@ namespace Warzywniak
             this.OrderProducts = new HashSet<OrderProduct>();
             this.Warehouses = new HashSet<Warehouse>();
         }
-    
+
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public decimal ProductPrice { get; set; }
-		[Required]
+        [Required]
         public string ProductUnit { get; set; }
-		[RegularExpression("5|8|23",ErrorMessage = "Vat rate must be 5, 8 or 23")]
+        [RegularExpression("5|8|23", ErrorMessage = "Vat rate must be 5, 8 or 23")]
         public int Vat { get; set; }
         public Nullable<bool> ForDelete { get; set; }
         public byte[] RowVersion { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -47,10 +47,10 @@ namespace Warzywniak
         public int Vat { get; set; }
         public Decimal ProductPrice { get; set; }
     }
-	public enum ProductUnit
-	{
-		kilogram,
-		litr,
-		sztuka
+    public enum ProductUnit
+    {
+        kilogram,
+        litr,
+        sztuka
     }
 }

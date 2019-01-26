@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="WarzywniakModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="WarzywniakModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Adresses">
           <Key>
             <PropertyRef Name="AdressId" />
@@ -67,7 +67,6 @@
           <Property Name="ProductId" Type="int" />
           <Property Name="ExpiryDate" Type="date" Nullable="false" />
           <Property Name="Quantity" Type="decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <Association Name="FK__Adresses__UserId__3F466844">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
@@ -136,6 +135,14 @@
         <Function Name="GetAllProductsForUserId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserId" Type="int" Mode="In" />
         </Function>
+        <Function Name="SaleSummary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BeginDate" Type="date" Mode="In" />
+          <Parameter Name="EndDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="SaleSummaryRealized" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BeginDate" Type="date" Mode="In" />
+          <Parameter Name="EndDate" Type="date" Mode="In" />
+        </Function>
         <EntityContainer Name="WarzywniakModelStoreContainer">
           <EntitySet Name="Adresses" EntityType="Self.Adresses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderProduct" EntityType="Self.OrderProduct" Schema="dbo" store:Type="Tables" />
@@ -164,8 +171,7 @@
             <End Role="Warehouse" EntitySet="Warehouse" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="WarzywniakModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -240,7 +246,6 @@
           <Property Name="ProductId" Type="Int32" />
           <Property Name="ExpiryDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Quantity" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="RowVersion" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
           <NavigationProperty Name="Product" Relationship="Self.FK__Warehouse__Produ__49C3F6B7" FromRole="Warehouse" ToRole="Products" />
         </EntityType>
         <Association Name="FK__Adresses__UserId__3F466844">
@@ -332,10 +337,18 @@
           </AssociationSet>
           <FunctionImport Name="DailyExceededExpiryDate" />
           <FunctionImport Name="GetAllOrdersValueForUserId" ReturnType="Collection(Decimal)">
-            <Parameter Name="UserId" Mode="In" Type="Int32" />
+          <Parameter Name="UserId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetAllProductsForUserId" ReturnType="Collection(WarzywniakModel.GetAllProductsForUserId_Result)">
-            <Parameter Name="UserId" Mode="In" Type="Int32" />
+          <Parameter Name="UserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SaleSummary" ReturnType="Collection(WarzywniakModel.SaleSummary_Result)">
+            <Parameter Name="BeginDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SaleSummaryRealized" ReturnType="Collection(WarzywniakModel.SaleSummaryRealized_Result)">
+            <Parameter Name="BeginDate" Mode="In" Type="DateTime" />
+            <Parameter Name="EndDate" Mode="In" Type="DateTime" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetAllProductsForUserId_Result">
@@ -343,6 +356,16 @@
           <Property Type="Decimal" Name="ProductPrice" Nullable="false" Precision="18" Scale="0" />
           <Property Type="String" Name="ProductUnit" Nullable="false" MaxLength="10" />
           <Property Type="Decimal" Name="Quantity" Nullable="false" Precision="18" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="SaleSummary_Result">
+          <Property Type="String" Name="ProductName" Nullable="false" MaxLength="69" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="38" Scale="0" />
+          <Property Type="Decimal" Name="Price" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="SaleSummaryRealized_Result">
+          <Property Type="String" Name="ProductName" Nullable="false" MaxLength="69" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="38" Scale="0" />
+          <Property Type="Decimal" Name="Price" Nullable="true" Precision="38" Scale="0" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -416,7 +439,6 @@
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -429,6 +451,24 @@
                 <ScalarProperty Name="ProductPrice" ColumnName="ProductPrice" />
                 <ScalarProperty Name="ProductUnit" ColumnName="ProductUnit" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SaleSummary" FunctionName="WarzywniakModel.Store.SaleSummary">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarzywniakModel.SaleSummary_Result">
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SaleSummaryRealized" FunctionName="WarzywniakModel.Store.SaleSummaryRealized">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarzywniakModel.SaleSummaryRealized_Result">
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

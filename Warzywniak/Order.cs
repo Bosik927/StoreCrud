@@ -11,9 +11,9 @@ namespace Warzywniak
 {
     using System;
     using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations;
 
-	public partial class Order
+    public partial class Order
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Order()
@@ -23,8 +23,8 @@ namespace Warzywniak
 
         public int OrderId { get; set; }
         public Nullable<int> UserId { get; set; }
-	    [DataType(DataType.Date)]
-	    [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> OrdareDate { get; set; }
         public Nullable<bool> Realized { get; set; }
         public byte[] RowVersion { get; set; }
@@ -54,7 +54,7 @@ namespace Warzywniak
         List<OrderEntity> OrderEntities { get; set; }
         public decimal fullOrdersPrice { get; set; }
 
-        public FullOrderEntity(List<OrderEntity> OrderEntities , decimal fullOrders)
+        public FullOrderEntity(List<OrderEntity> OrderEntities, decimal fullOrders)
         {
             this.OrderEntities = OrderEntities;
             this.fullOrdersPrice = fullOrders;

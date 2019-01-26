@@ -11,7 +11,7 @@ namespace Warzywniak
 {
     using System;
     using System.Collections.Generic;
-    
+
     public partial class Adress
     {
         public int AdressId { get; set; }
@@ -19,7 +19,7 @@ namespace Warzywniak
         public Nullable<int> HouseNumber { get; set; }
         public Nullable<int> UserId { get; set; }
         public byte[] RowVersion { get; set; }
-    
+
         public virtual User User { get; set; }
     }
 }
