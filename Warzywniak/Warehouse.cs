@@ -11,15 +11,20 @@ namespace Warzywniak
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Warehouse
     {
+
         public int WarehouseId { get; set; }
         public Nullable<int> ProductId { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public System.DateTime ExpiryDate { get; set; }
+
+        [Required(ErrorMessage = "Quantity cannot be empty!")]
         public decimal Quantity { get; set; }
-        public byte[] RowVersion { get; set; }
-    
         public virtual Product Product { get; set; }
+
     }
 }

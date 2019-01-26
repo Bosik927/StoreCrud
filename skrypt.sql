@@ -127,7 +127,7 @@ ProductId int,
 FOREIGN KEY (ProductId) REFERENCES Products(ProductId),
 ExpiryDate date not null,
 Quantity decimal not null,
-RowVersion timestamp
+--RowVersion timestamp
 );
 
 INSERT INTO Warehouse(ProductId,ExpiryDate,Quantity) VALUES
@@ -189,7 +189,7 @@ begin
 end
 GO
 
-create trigger CleanDbAfterDeletingProduct
+create trigger AddWarehousesExceededExpiryDate
 on Products
 INSTEAD OF delete
 as 
@@ -206,19 +206,27 @@ begin
 end
 GO
 
-create trigger AddWarehousesExceededExpiryDate
+create trigger WarehousesAddingEdditing
 on Warehouse
-for insert, update
+after insert, update
 as 
 begin
+SET NOCOUNT OFF;
 	declare @expdate date;
+	declare @quantity decimal;
+	declare @productId int;
 	select @expdate=i.ExpiryDate from inserted i;
-
-	if(@expdate < GETDATE())
+	select @quantity= i.Quantity from inserted i;
+	select @productId= i.ProductId from inserted i;
+	if(@quantity<=0)
+	begin
+		rollback;
+		raiserror('Quantity must be greater than 0',16,1);
+	end
+	else if(@expdate < GETDATE())
 	begin 
 		rollback;
-		raiserror('*** DATA WA¯NOŒCI ZOSTA£A PRZEKROCZONA ***',16,1);
-
+		raiserror('Expiry date exceeded',16,1);
 	end
 end
 GO
@@ -370,3 +378,5 @@ begin
 	group by p.ProductName
 end
 GO
+
+

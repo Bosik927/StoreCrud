@@ -56,5 +56,31 @@ namespace Warzywniak
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAllProductsForUserId_Result>("GetAllProductsForUserId", userIdParameter);
         }
+    
+        public virtual ObjectResult<SaleSummary_Result> SaleSummary(Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
+        {
+            var beginDateParameter = beginDate.HasValue ?
+                new ObjectParameter("BeginDate", beginDate) :
+                new ObjectParameter("BeginDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleSummary_Result>("SaleSummary", beginDateParameter, endDateParameter);
+        }
+    
+        public virtual ObjectResult<SaleSummaryRealized_Result> SaleSummaryRealized(Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
+        {
+            var beginDateParameter = beginDate.HasValue ?
+                new ObjectParameter("BeginDate", beginDate) :
+                new ObjectParameter("BeginDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleSummaryRealized_Result>("SaleSummaryRealized", beginDateParameter, endDateParameter);
+        }
     }
 }

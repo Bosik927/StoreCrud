@@ -15,11 +15,12 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.OrdareDate)
+            @*@Html.DisplayNameFor(model => model.OrdareDate)*@
+            @Html.ActionLink("Order date", "Index", new { sortOrder = ViewBag.DateSortParm })
         </th>
         <th>
             @*@Html.DisplayNameFor(model => model.User.Nick)*@
-            @Html.ActionLink("Name", "Index")
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.User.PhoneNumber)
@@ -43,12 +44,13 @@
             @Html.DisplayFor(modelItem => item.User.PhoneNumber)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Realized)
+            @*@Html.DisplayFor(modelItem => item.Realized)*@
+            @Html.DisplayTextFor(modelItem => item.Realized)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id = item.OrderId }) |
             @Html.ActionLink("Details", "Details", new { id = item.OrderId }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.OrderId })
+            @Html.ActionLink("Delete", "Delete", new { id = item.OrderId }) |
 	        @Html.ActionLink("AddProducts", "AddProducts", new { id = item.OrderId })
 
         </td>

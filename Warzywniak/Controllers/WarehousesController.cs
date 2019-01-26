@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -17,8 +18,8 @@ namespace Warzywniak.Controllers
 		// GET: Warehouses
 		public ActionResult Index()
 		{
-			var warehouses = db.Warehouses.Include(w => w.Product);
-			return View(warehouses.ToList());
+            var warehouses = db.Warehouses.Include(w => w.Product);
+            return View(warehouses.ToList());
 		}
 
 		// GET: Warehouses/Details/5
@@ -48,39 +49,48 @@ namespace Warzywniak.Controllers
 		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create([Bind(Include = "WarehouseId,ProductId,ExpiryDate,Quantity,RowVersion")] Warehouse warehouse)
+		public ActionResult Create([Bind(Include = "WarehouseId,ProductId,ExpiryDate,Quantity")] Warehouse warehouse)
 		{
 			ViewBag.Comunicate = null;
-			try
-			{
-				if (ModelState.IsValid)
+            ViewBag.ProductId = new SelectList(db.Products, "ProductId", "ProductName");
+
+            try
+            {
+
+                if (ModelState.IsValid)
 				{
-					db.Warehouses.Add(warehouse);
-					db.SaveChanges();
-					return RedirectToAction("Index");
+                    
+                    db.Warehouses.Add(warehouse);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
 				}
 				else
 				{
 					throw new ArgumentException("Invalid arguments!");
 				}
 			}
-			catch (ArgumentException e)
+            catch (DbUpdateConcurrencyException e)
+            {
+                ViewBag.Comunicate = "Concurrnet exception occur!";
+                return View();
+            }
+            catch (ArgumentException e)
 			{
 				ViewBag.Comunicate = e.Message;
-				return View();
+                return View();
 			}
 			catch (DataException e)
 			{
-				ViewBag.Comunicate = e.InnerException.InnerException.Message;
-				return View();
+                ViewBag.Comunicate = e.InnerException.InnerException != null ?
+                      e.InnerException.InnerException.Message : e.InnerException.Message;
+                
+                return View();
 			}
 			catch (Exception e)
 			{
 				ViewBag.Comunicate = e.Message;
 				return View();
 			}
-
-			ViewBag.ProductId = new SelectList(db.Products, "ProductId", "ProductName", warehouse.ProductId);
 			return View(warehouse);
 		}
 
@@ -105,15 +115,18 @@ namespace Warzywniak.Controllers
 		// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit([Bind(Include = "WarehouseId,ProductId,ExpiryDate,Quantity,RowVersion")] Warehouse warehouse)
+		public ActionResult Edit([Bind(Include = "WarehouseId,ProductId,ExpiryDate,Quantity")] Warehouse warehouse)
 		{
 			ViewBag.Comunicate = null;
-			try
-			{
+            ViewBag.ProductId = new SelectList(db.Products, "ProductId", "ProductName", warehouse.ProductId);
+
+            try
+            {
 				if (ModelState.IsValid)
 				{
 					db.Entry(warehouse).State = EntityState.Modified;
 					db.SaveChanges();
+                    
 					return RedirectToAction("Index");
 				}
 				else
@@ -136,7 +149,6 @@ namespace Warzywniak.Controllers
 				ViewBag.Comunicate = e.Message;
 				return View();
 			}
-			ViewBag.ProductId = new SelectList(db.Products, "ProductId", "ProductName", warehouse.ProductId);
 			return View(warehouse);
 		}
 

@@ -16,11 +16,28 @@ namespace Warzywniak.Controllers
 		private WarzywniakEntities db = new WarzywniakEntities();
 
 		// GET: Orders
-		public ActionResult Index()
+		public ActionResult Index(string sortOrder)
 		{
-			var orders = db.Orders.Include(o => o.User);
-			orders = orders.OrderBy(o => o.User.Nick);//sortowanie
-													  //trzeba sparametryzować metode
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Order date" ? "date_desc" : "Order date";
+
+            var orders = db.Orders.Include(o => o.User);
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    orders = orders.OrderByDescending(o => o.User.Nick);
+                    break;
+                case "Order date":
+                    orders = orders.OrderBy(o => o.OrdareDate);
+                    break;
+                case "date_desc":
+                    orders = orders.OrderByDescending(o => o.OrdareDate);
+                    break;
+                default:
+                    orders = orders.OrderBy(o => o.User.Nick);
+                    break;
+            }
 			return View(orders.ToList());
 		}
 
@@ -58,10 +75,13 @@ namespace Warzywniak.Controllers
 		public ActionResult Create([Bind(Include = "OrderId,UserId,OrdareDate,Realized,RowVersion")] Order order)
 		{
 			ViewBag.Comunicate = null;
+			ViewBag.UserId = new SelectList(db.Users, "UserId", "Nick", order.UserId);
+
 			try
 			{
 				if (ModelState.IsValid)
 				{
+                    order.Realized = false;
 					db.Orders.Add(order);
 					db.SaveChanges();
 					return RedirectToAction("Index");
@@ -82,7 +102,6 @@ namespace Warzywniak.Controllers
 				return View();
 			}
 
-			ViewBag.UserId = new SelectList(db.Users, "UserId", "Nick", order.UserId);
 			return View(order);
 		}
 
@@ -108,7 +127,11 @@ namespace Warzywniak.Controllers
 		public ActionResult AddProducts([Bind(Include = "OrderProductId,ProductId,OrderId,Quantity,RowVersion")] OrderProduct orderProduct)
 		{
 			ViewBag.Comunicate = null;
-			try
+
+            ViewBag.OrderId = new SelectList(db.Orders, "OrderId", "OrderId", orderProduct.OrderId);
+            ViewBag.ProductId = new SelectList(db.Products, "ProductId", "ProductName", orderProduct.ProductId);
+
+            try
 			{
 				if (ModelState.IsValid)
 				{
@@ -131,9 +154,6 @@ namespace Warzywniak.Controllers
 				ViewBag.Comunicate = "Unknown error!";
 				return View();
 			}
-
-			ViewBag.OrderId = new SelectList(db.Orders, "OrderId", "OrderId", orderProduct.OrderId);
-			ViewBag.ProductId = new SelectList(db.Products, "ProductId", "ProductName", orderProduct.ProductId);
 			return View(orderProduct);
 		}
 
@@ -162,8 +182,10 @@ namespace Warzywniak.Controllers
 		public ActionResult Edit([Bind(Include = "OrderId,UserId,OrdareDate,Realized,RowVersion")] Order order)
 		{
 			ViewBag.Comunicate = null;
-			try
-			{
+            ViewBag.UserId = new SelectList(db.Users, "UserId", "Nick", order.UserId);
+
+            try
+            {
 				if (ModelState.IsValid)
 				{
 					db.Entry(order).State = EntityState.Modified;
@@ -185,7 +207,6 @@ namespace Warzywniak.Controllers
 				ViewBag.Comunicate = "Unknown error!";
 				return View();
 			}
-			ViewBag.UserId = new SelectList(db.Users, "UserId", "Nick", order.UserId);
 			return View(order);
 		}
 

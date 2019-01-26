@@ -29,7 +29,7 @@ namespace Warzywniak
         public string Password { get; set; }
         [Required(ErrorMessage = "Phone number cannot be empty!")]
         public int PhoneNumber { get; set; }
-        [RegularExpression(".+[@].+\\.(com|pl)", ErrorMessage = "Wrong email format! Needed format like: something@something.com! Avaliable extension: pl, com")]
+        [RegularExpression(".+[@].+\\.(\\w{1,4})", ErrorMessage = "Wrong email format! Needed format like: something@something.com!")]
         public string EmailAddress { get; set; }
         public Nullable<bool> ForDelete { get; set; }
         public byte[] RowVersion { get; set; }
