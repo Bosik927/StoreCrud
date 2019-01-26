@@ -37,8 +37,7 @@ Nick varchar(69) not null,
 Password varchar(69) not null,
 PhoneNumber int not null,
 EmailAddress varchar(69) not null,
-ForDelete bit default(0),
-RowVersion timestamp default CURRENT_TIMESTAMP
+ForDelete bit default(0)
 );
 
 INSERT INTO Users(Nick,Password,PhoneNumber,EmailAddress) VALUES
