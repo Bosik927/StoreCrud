@@ -1,0 +1,86 @@
+﻿@model IEnumerable<Warzywniak.SaleSummaryN_Result>
+
+
+@{
+    ViewBag.Title = "Sale Summary";
+}
+
+<h2>Sale summary</h2>
+
+<div>
+    <hr />
+    <h4>Selected date range</h4>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Begin date")
+        </dt>
+        <dd>
+            @ViewBag.BeginDate
+        </dd>
+        <dt>
+            @Html.DisplayName("End date")
+        </dt>
+        <dd>
+            @ViewBag.EndDate
+        </dd>
+    </dl>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductPrice)
+        </th>
+        <th>
+            @Html.DisplayName("SUM")
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Summ)
+
+            </td>
+        </tr>
+    }
+    <hr style="height:50px">
+    <tr>
+        <th>
+            
+        </th>
+        <td></td>
+        <td></td>
+        <th>
+            *********
+        </th>
+    </tr>
+    <tr>
+        <th>
+            TOTAL
+        </th>
+        <td></td>
+        <td></td>
+        <th>
+            @ViewBag.Total
+        </th>
+    </tr>
+</table>
+
+@Html.ActionLink("Back to List", "Index")

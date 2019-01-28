@@ -10,10 +10,10 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-	if (@ViewBag.Comunicate != null)
-	{
-		<label>Problem :</label> @ViewBag.Comunicate
-	}
+    if (@ViewBag.Comunicate != null)
+    {
+        <font color="red"><label>Problem :</label> @ViewBag.Comunicate</font>
+    }
     <div class="form-horizontal">
         <h4>Product</h4>
         <hr />
@@ -39,7 +39,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ProductUnit, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-	            @Html.DropDownList("ProductUnit", new SelectList(Enum.GetValues(typeof(ProductUnit))),new { @class = "form-control" })
+                @Html.DropDownList("ProductUnit", new SelectList(Enum.GetValues(typeof(ProductUnit))), new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ProductUnit, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -47,8 +47,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Vat, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-	            @Html.DropDownList("ProductUnit", new SelectList(Enum.GetValues(typeof(ProductUnit))),
-		            "Select product Unit",new { @class = "form-control" })
+                @Html.DropDownList("ProductUnit", new SelectList(Enum.GetValues(typeof(ProductUnit))),
+                    "Select product Unit",new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Vat, "", new { @class = "text-danger" })
             </div>
         </div>

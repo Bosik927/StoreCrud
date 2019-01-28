@@ -7,13 +7,13 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-	if (@ViewBag.Comunicate != null)
-	{
-		<label>Problem :</label> @ViewBag.Comunicate
-	}
+    if (@ViewBag.Comunicate != null)
+    {
+        <font color="red"><label>Problem :</label> @ViewBag.Comunicate</font>
+    }
 
     <div class="form-horizontal">
         <h4>Warehouse</h4>

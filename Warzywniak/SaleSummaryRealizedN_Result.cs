@@ -11,10 +11,11 @@ namespace Warzywniak
 {
     using System;
     
-    public partial class SaleSummary_Result
+    public partial class SaleSummaryRealizedN_Result
     {
         public string ProductName { get; set; }
         public Nullable<decimal> Quantity { get; set; }
-        public Nullable<decimal> Price { get; set; }
+        public decimal ProductPrice { get; set; }
+        public Nullable<decimal> Summ { get; set; }
     }
 }

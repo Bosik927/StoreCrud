@@ -151,11 +151,11 @@ INSERT INTO Warehouse(ProductId,ExpiryDate,Quantity) VALUES
 (10,'2017-01-21',1337),
 (11,'2017-01-21',69),
 (11,'2017-01-21',84),
-(11,'2017-01-21',32),
-(11,'2017-01-21',12),
-(12,'2017-01-21',87),
-(12,'2017-01-21',44),
-(12,'2017-01-21',33);
+(11,'2019-01-21',32),
+(11,'2020-01-21',12),
+(12,'2021-01-21',87),
+(12,'2022-01-21',44),
+(12,'2023-01-21',33);
 
 --Triggery
 GO
@@ -189,7 +189,7 @@ begin
 end
 GO
 
-create trigger AddWarehousesExceededExpiryDate
+create trigger DeletingProducts
 on Products
 INSTEAD OF delete
 as 
@@ -211,13 +211,10 @@ on Warehouse
 after insert, update
 as 
 begin
-SET NOCOUNT OFF;
 	declare @expdate date;
 	declare @quantity decimal;
-	declare @productId int;
 	select @expdate=i.ExpiryDate from inserted i;
 	select @quantity= i.Quantity from inserted i;
-	select @productId= i.ProductId from inserted i;
 	if(@quantity<=0)
 	begin
 		rollback;
@@ -246,13 +243,20 @@ begin
 	if(@quantity > @quantityWH)
 	begin 
 		rollback;
-		raiserror('*** BRAK WYSTARCZAJ¥CEJ ILOŒCI TOWARU W MAGAZYNIE ***',16,1);
+		raiserror('There is no sufficient quantity of product in stock ',16,1);
 
 	end
 end
 GO
 
 create procedure DailyExceededExpiryDate
+as 
+begin
+	delete from Warehouse where ExpiryDate < GETDATE();
+end
+GO
+
+create procedure DeltingUsersProductsForDelete
 as 
 begin
 	delete from Warehouse where ExpiryDate < GETDATE();
@@ -352,31 +356,35 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE SaleSummary
+CREATE PROCEDURE SaleSummaryN
 @BeginDate DATE,
 @EndDate DATE
 as
 begin 
-	select p.ProductName, sum(op.Quantity) Quantity, sum(Quantity*p.ProductPrice) Price from Products p
+	select p.ProductName, sum(op.Quantity) Quantity, p.ProductPrice, sum(Quantity*p.ProductPrice) Summ from Products p
 	join OrderProduct op on op.ProductId=p.ProductId
 	join Orders o on o.OrderId=op.OrderId
 	where o.OrdareDate between @BeginDate and @EndDate
-	group by p.ProductName
+	group by p.ProductName, p.ProductPrice
 end
 GO
 
-CREATE PROCEDURE SaleSummaryRealized
+CREATE PROCEDURE SaleSummaryRealizedN
 @BeginDate DATE,
 @EndDate DATE
 as
 begin 
-	select p.ProductName, sum(op.Quantity) Quantity, sum(Quantity*p.ProductPrice) Price from Products p
+	select p.ProductName, sum(op.Quantity) Quantity, p.ProductPrice, sum(Quantity*p.ProductPrice) Summ from Products p
 	join OrderProduct op on op.ProductId=p.ProductId
 	join Orders o on o.OrderId=op.OrderId
 	where (o.OrdareDate between @BeginDate and @EndDate)
 	and o.Realized=1
-	group by p.ProductName
+	group by p.ProductName, p.ProductPrice
 end
 GO
 
-
+--select * from dbo.Warehouse
+--exec SaleSummary '1990.1.1', '2020.11.1'
+--select op.Quantity, p.ProductName from OrderProduct op
+--join Products p on p.ProductId=op.ProductId
+--group by p.ProductName, op.Quantity

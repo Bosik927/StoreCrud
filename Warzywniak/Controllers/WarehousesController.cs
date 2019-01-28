@@ -16,14 +16,20 @@ namespace Warzywniak.Controllers
 		private WarzywniakEntities db = new WarzywniakEntities();
 
 		// GET: Warehouses
-		public ActionResult Index()
+		public ActionResult Index(string Procedure)
 		{
+
+            if (Procedure == "expired")
+            {
+                var proc = db.DailyExceededExpiryDate();
+                db.SaveChanges();
+            }
+
             var warehouses = db.Warehouses.Include(w => w.Product);
             return View(warehouses.ToList());
 		}
 
-		// GET: Warehouses/Details/5
-		public ActionResult Details(int? id)
+        public ActionResult Details(int? id)
 		{
 			if (id == null)
 			{

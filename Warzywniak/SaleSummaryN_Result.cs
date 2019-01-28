@@ -10,23 +10,26 @@
 namespace Warzywniak
 {
     using System;
-    using System.Collections.Generic;
+
     using System.ComponentModel.DataAnnotations;
 
-    public partial class Warehouse
+    public partial class SaleSummaryN_Result
     {
+        public string ProductName { get; set; }
+        public Nullable<decimal> Quantity { get; set; }
+        public decimal ProductPrice { get; set; }
+        public Nullable<decimal> Summ { get; set; }
 
-        public int WarehouseId { get; set; }
-        public Nullable<int> ProductId { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public System.DateTime ExpiryDate { get; set; }
-
-
-        [Required(ErrorMessage = "Quantity cannot be empty!")]
-        [Range(0.01, 999999999, ErrorMessage = "Price must be greater than 0.00")]
-        public decimal Quantity { get; set; }
-        public virtual Product Product { get; set; }
+        public System.DateTime BeginDate { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public System.DateTime EndDate { get; set; }
 
     }
+    //public partial class SaleSummaryParams
+    //{
+
+    //}
 }

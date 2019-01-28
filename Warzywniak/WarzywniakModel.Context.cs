@@ -57,20 +57,38 @@ namespace Warzywniak
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetAllProductsForUserId_Result>("GetAllProductsForUserId", userIdParameter);
         }
     
-        public virtual ObjectResult<SaleSummary_Result> SaleSummary(Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
+        //public virtual ObjectResult<SaleSummary_Result> SaleSummary(Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
+        //{
+        //    var beginDateParameter = beginDate.HasValue ?
+        //        new ObjectParameter("BeginDate", beginDate) :
+        //        new ObjectParameter("BeginDate", typeof(System.DateTime));
+    
+        //    var endDateParameter = endDate.HasValue ?
+        //        new ObjectParameter("EndDate", endDate) :
+        //        new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleSummary_Result>("SaleSummary", beginDateParameter, endDateParameter);
+        //}
+    
+        //public virtual ObjectResult<SaleSummaryRealized_Result> SaleSummaryRealized(Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
+        //{
+        //    var beginDateParameter = beginDate.HasValue ?
+        //        new ObjectParameter("BeginDate", beginDate) :
+        //        new ObjectParameter("BeginDate", typeof(System.DateTime));
+    
+        //    var endDateParameter = endDate.HasValue ?
+        //        new ObjectParameter("EndDate", endDate) :
+        //        new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+        //    return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleSummaryRealized_Result>("SaleSummaryRealized", beginDateParameter, endDateParameter);
+        //}
+    
+        public virtual int DeltingUsersProductsForDelete()
         {
-            var beginDateParameter = beginDate.HasValue ?
-                new ObjectParameter("BeginDate", beginDate) :
-                new ObjectParameter("BeginDate", typeof(System.DateTime));
-    
-            var endDateParameter = endDate.HasValue ?
-                new ObjectParameter("EndDate", endDate) :
-                new ObjectParameter("EndDate", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleSummary_Result>("SaleSummary", beginDateParameter, endDateParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeltingUsersProductsForDelete");
         }
     
-        public virtual ObjectResult<SaleSummaryRealized_Result> SaleSummaryRealized(Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
+        public virtual ObjectResult<SaleSummaryN_Result> SaleSummaryN(Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
         {
             var beginDateParameter = beginDate.HasValue ?
                 new ObjectParameter("BeginDate", beginDate) :
@@ -80,7 +98,20 @@ namespace Warzywniak
                 new ObjectParameter("EndDate", endDate) :
                 new ObjectParameter("EndDate", typeof(System.DateTime));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleSummaryRealized_Result>("SaleSummaryRealized", beginDateParameter, endDateParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleSummaryN_Result>("SaleSummaryN", beginDateParameter, endDateParameter);
+        }
+    
+        public virtual ObjectResult<SaleSummaryRealizedN_Result> SaleSummaryRealizedN(Nullable<System.DateTime> beginDate, Nullable<System.DateTime> endDate)
+        {
+            var beginDateParameter = beginDate.HasValue ?
+                new ObjectParameter("BeginDate", beginDate) :
+                new ObjectParameter("BeginDate", typeof(System.DateTime));
+    
+            var endDateParameter = endDate.HasValue ?
+                new ObjectParameter("EndDate", endDate) :
+                new ObjectParameter("EndDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleSummaryRealizedN_Result>("SaleSummaryRealizedN", beginDateParameter, endDateParameter);
         }
     }
 }

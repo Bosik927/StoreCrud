@@ -7,8 +7,8 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Order</h4>
     <hr />
+    <h4>Order</h4>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.OrdareDate)
@@ -23,11 +23,8 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Realized)
+            @Html.DisplayTextFor(model => model.Realized)
         </dd>
-
-
-
         <dt>
             @Html.DisplayNameFor(model => model.User.Nick)
         </dt>
@@ -37,7 +34,7 @@
         </dd>
 
     </dl>
-
+    <hr>
     <table class="table">
         <tr>
             <th>
@@ -49,21 +46,27 @@
             <th>
                 @Html.DisplayName("Price")
             </th>
+            @*<th>
+                @Html.DisplayName("Sum")
+            </th>*@
         </tr>
 
         @foreach (var item in Model.OrderProducts)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.ProductPrice)
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.ProductPrice)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.Product.ProductPrice)
+                </td>*@
+            </tr>
         }
     </table>
 </div>

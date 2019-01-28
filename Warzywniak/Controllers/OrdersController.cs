@@ -41,9 +41,47 @@ namespace Warzywniak.Controllers
 			return View(orders.ToList());
 		}
 
+        public ActionResult SaleSummary(string param)
+        {
+            DateTime todayDate = DateTime.Today;
+            var beginDate = new DateTime(todayDate.Year, todayDate.Month, 1);
+            var endDate = beginDate.AddMonths(1).AddDays(-1);
 
-		// GET: Orders/Details/5
-		public ActionResult Details(int? id)
+            ViewBag.BeginDate = beginDate.ToString("dd.MM.yyyy");
+            ViewBag.EndDate = endDate.ToString("dd.MM.yyyy");
+
+            var summary = db.SaleSummaryN(beginDate, endDate);
+            decimal total = 0;
+            List<SaleSummaryN_Result> saleSummary = new List<SaleSummaryN_Result>();
+            foreach (var q in summary)
+            {
+                total += (decimal)q.Summ;
+                saleSummary.Add(q);
+            }
+            summary = db.SaleSummaryN(beginDate, endDate);
+            ViewBag.Total = total;
+            return View(saleSummary);
+        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult SaleSummary([Bind(Include = "BeginDate, EndDate")] SaleSummaryN_Result param)
+        //{
+        //    ViewBag.Comunicate = null;
+
+        //    var beginDate = param.BeginDate;
+        //    var endDate = param.EndDate.AddDays(1);
+
+        //    ViewBag.BeginDate = beginDate.ToString("dd.MM.yyyy");
+        //    ViewBag.EndDate = endDate.AddDays(-1).ToString("dd.MM.yyyy");
+
+        //    var summary = db.SaleSummaryN(beginDate, endDate);
+        //    return View(summary);
+        //    return View();
+        //}
+
+            // GET: Orders/Details/5
+            public ActionResult Details(int? id)
 		{
 			if (id == null)
 			{
@@ -149,7 +187,14 @@ namespace Warzywniak.Controllers
 				ViewBag.Comunicate = "Concurrnet exception occur!";
 				return View();
 			}
-			catch (Exception e)
+            catch (DataException e)
+            {
+                ViewBag.Comunicate = e.InnerException.InnerException != null ?
+                      e.InnerException.InnerException.Message : e.InnerException.Message;
+
+                return View();
+            }
+            catch (Exception e)
 			{
 				ViewBag.Comunicate = "Unknown error!";
 				return View();

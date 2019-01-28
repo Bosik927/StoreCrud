@@ -10,10 +10,10 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-	if (@ViewBag.Comunicate != null)
-	{
-		<label>Problem :</label> @ViewBag.Comunicate
-	}
+    if (@ViewBag.Comunicate != null)
+    {
+        <font color="red"><label>Problem :</label> @ViewBag.Comunicate</font>
+    }
     <div class="form-horizontal">
         <h4>Warehouse</h4>
         <hr />
@@ -45,12 +45,12 @@
         </div>
 
         @*<div class="form-group">
-            @Html.LabelFor(model => model.RowVersion, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.RowVersion, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.RowVersion, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
+                @Html.LabelFor(model => model.RowVersion, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.RowVersion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.RowVersion, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
