@@ -40,6 +40,7 @@ namespace Warzywniak
         public virtual ICollection<Order> Orders { get; set; }
     }
 
+
     public class UserAdress
     {
         public User user { get; set; }

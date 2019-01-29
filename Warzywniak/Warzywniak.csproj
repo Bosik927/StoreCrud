@@ -167,10 +167,10 @@
       <DependentUpon>WarzywniakModel.tt</DependentUpon>
     </Compile>
     <!-- <Compile Include="SaleSummaryRealized_Result.cs"> -->
-      <!-- <DependentUpon>WarzywniakModel.tt</DependentUpon> -->
+    <!-- <DependentUpon>WarzywniakModel.tt</DependentUpon> -->
     <!-- </Compile> -->
     <!-- <Compile Include="SaleSummary_Result.cs"> -->
-      <!-- <DependentUpon>WarzywniakModel.tt</DependentUpon> -->
+    <!-- <DependentUpon>WarzywniakModel.tt</DependentUpon> -->
     <!-- </Compile> -->
     <Compile Include="User.cs">
       <DependentUpon>WarzywniakModel.tt</DependentUpon>
@@ -280,6 +280,7 @@
     <Content Include="Views\Users\ShowAllOrders.cshtml" />
     <Content Include="Views\Orders\AddProducts.cshtml" />
     <Content Include="Views\Orders\SaleSummary.cshtml" />
+    <Content Include="Views\Users\BestClients.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

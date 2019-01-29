@@ -21,7 +21,7 @@ namespace Warzywniak.Controllers
         public ActionResult Index()
         {
             var users = from user in db.Users
-                        where user.ForDelete == false
+                            //where user.ForDelete == false
                         select user;
 
             return View(users);
@@ -74,7 +74,7 @@ namespace Warzywniak.Controllers
                 }
                 else
                 {
-                   throw new ArgumentException("Invalid arguments!");
+                    throw new ArgumentException("Invalid arguments!");
                 }
             }
             catch (ArgumentException e)
@@ -129,7 +129,7 @@ namespace Warzywniak.Controllers
             ViewBag.Comunicate = null;
             user.ForDelete = false;
             try
-            { 
+            {
                 if (ModelState.IsValid)
                 {
                     user.ForDelete = false;
@@ -138,7 +138,7 @@ namespace Warzywniak.Controllers
 
                     db.Entry(adress).State = EntityState.Modified;
                     db.SaveChanges();
-                    
+
                 }
                 else
                 {
@@ -195,7 +195,7 @@ namespace Warzywniak.Controllers
 
             var ordersIds = (from or in db.Orders
                              where or.UserId == id
-                             select new { or.OrderId, or.OrdareDate }).Distinct().ToList();
+                             select new { or.OrderId, or.OrdareDate, or.Realized }).Distinct().ToList();
 
             if (ordersIds == null)
             {
@@ -217,6 +217,8 @@ namespace Warzywniak.Controllers
                                       ProductUnit = pr.ProductUnit,
                                       Vat = pr.Vat,
                                       ProductPrice = pr.ProductPrice,
+                                      Sum = op.Quantity * pr.ProductPrice,
+
                                   }).ToList();
 
                 var query = from op in db.OrderProducts
@@ -225,25 +227,36 @@ namespace Warzywniak.Controllers
                             select new
                             {
                                 Price = p.ProductPrice,
-                                Quantity = op.Quantity
+                                Quantity = op.Quantity,
                             };
 
                 decimal sum = 0;
-                foreach(var q in query)
+                foreach (var q in query)
                 {
                     sum += q.Price * q.Quantity;
+
                 }
-                           
-                orderEntities.Add(new OrderEntity(orderId.OrderId, entryPoint, orderId.OrdareDate.Value,sum));
+
+                bool realized = (bool)orderId.Realized;
+                orderEntities.Add(new OrderEntity(orderId.OrderId, entryPoint, orderId.OrdareDate.Value, realized, sum));
                 fullSum += sum;
             }
-
+            IList<User> u = new List<User>();
+            u.Add(user);
+            ViewData["user"] = u;
+            ViewBag.Total = fullSum;
 
             //FullOrderEntity fullOrderEntity = new FullOrderEntity(orderEntities, fullSum);
 
             return View(orderEntities);
         }
 
+        public ActionResult BestClients(int amount)
+        {
+
+            return View();
+
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

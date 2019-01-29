@@ -46,6 +46,7 @@ namespace Warzywniak
         public string ProductUnit { get; set; }
         public int Vat { get; set; }
         public Decimal ProductPrice { get; set; }
+        public Decimal Sum { get; set; }
     }
     public enum ProductUnit
     {

@@ -14,10 +14,25 @@ namespace Warzywniak
     
     public partial class OrderProduct
     {
+        public OrderProduct()
+        {
+        }
+        public OrderProduct(OrderProduct op, decimal sum)
+        {
+            this.OrderId = op.OrderId;
+            this.OrderProductId = op.OrderProductId;
+            this.ProductId = op.ProductId;
+            this.Quantity = op.Quantity;
+            this.Product = op.Product;
+            this.Order = op.Order;
+            this.Sum = op.Quantity * op.Product.ProductPrice;
+        }
         public int OrderProductId { get; set; }
         public Nullable<int> ProductId { get; set; }
         public Nullable<int> OrderId { get; set; }
         public decimal Quantity { get; set; }
+        public decimal Sum { get; set; }
+
         public byte[] RowVersion { get; set; }
     
         public virtual Order Order { get; set; }

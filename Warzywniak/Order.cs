@@ -38,15 +38,19 @@ namespace Warzywniak
     {
         public int OrderId { get; set; }
         public List<ProductEntity> products { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime OrderDate { get; set; }
         public decimal fullPrice { get; set; }
+        public Nullable<bool> Realized { get; set; }
 
-        public OrderEntity(int OrderId, List<ProductEntity> products, DateTime OrderDate, decimal fullPrice)
+        public OrderEntity(int OrderId, List<ProductEntity> products, DateTime OrderDate, bool realized, decimal fullPrice)
         {
             this.OrderId = OrderId;
             this.products = products;
             this.OrderDate = OrderDate;
             this.fullPrice = fullPrice;
+            this.Realized = realized;
         }
     }
     public partial class FullOrderEntity

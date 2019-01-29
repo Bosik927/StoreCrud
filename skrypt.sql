@@ -383,6 +383,10 @@ begin
 end
 GO
 
+create view BestClient as
+select  from Users u
+
+
 --select * from dbo.Warehouse
 --exec SaleSummary '1990.1.1', '2020.11.1'
 --select op.Quantity, p.ProductName from OrderProduct op

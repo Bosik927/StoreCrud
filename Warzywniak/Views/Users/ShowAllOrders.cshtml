@@ -2,7 +2,34 @@
 @{
     ViewBag.Title = "ShowAllOrders";
 }
-<h2>ShowAllOrders</h2>
+<h2>User's order summary</h2>
+
+<div>
+    <h4>User:</h4>
+    @foreach (var user in @ViewData["user"] as IList<User>)
+    {
+    <dl class="dl-horizontal">
+        <dt>
+            Nick:
+        </dt>
+        <dd>
+            @user.Nick
+        </dd>
+        <dt>
+            Phone number:
+        </dt>
+        <dd>
+            @user.PhoneNumber
+        </dd>
+        <dt>
+            Total:
+        </dt>
+        <dd>
+            @ViewBag.Total zł
+        </dd>
+    </dl>
+    }
+</div>
 
 <table class="table">
     <tr>
@@ -12,22 +39,25 @@
         <th>
             @Html.DisplayNameFor(model => model.OrderDate)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Realized)
+        </th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                <strong> @Html.DisplayFor(modelItem => item.OrderId)</strong>
-            </td>
-            <td>
-                <strong>  @Html.DisplayFor(modelItem => item.OrderDate)</strong>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
+    <tr>
+        <th>
+            @Html.DisplayFor(modelItem => item.OrderId)
+        </th>
+        <th>
+            @Html.DisplayFor(modelItem => item.OrderDate)
+        </th>
+        <th>
+            @Html.DisplayTextFor(modelItem => item.Realized)
 
-        </tr>
+        </th>
+    </tr>
 
         <td>
             Product Name
@@ -44,6 +74,10 @@
         <td>
             Product Price
         </td>
+        <td>
+            Total
+        </td>
+
         foreach (var product in item.products)
         {
             <tr>
@@ -62,18 +96,25 @@
                 <td>
                     @Html.DisplayFor(modelItem => product.ProductPrice)
                 </td>
-
+                <td>
+                    @Html.DisplayFor(modelItem => product.Sum)
+                </td>
             </tr>
 
         }
 
             <tr>
-                <td>
-                Full Order value: 
-                </td>
-                <td>
-                    <strong> @Html.DisplayFor(modelItem => item.fullPrice)</strong>
-                </td>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+
+                <th>
+                    Full Order value:
+                </th>
+                <th>
+                     @Html.DisplayFor(modelItem => item.fullPrice)
+                </th>
             </tr>
 
     }

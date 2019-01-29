@@ -89,6 +89,12 @@ namespace Warzywniak.Controllers
 			}
 			Order order = db.Orders.Find(id);
 
+            List < OrderProduct > opList = new List<OrderProduct>();
+            foreach(var op in order.OrderProducts)
+            {
+                opList.Add(new OrderProduct(op, op.Quantity * op.Product.ProductPrice));
+            }
+            order.OrderProducts = opList;
 			if (order == null)
 			{
 				return HttpNotFound();
