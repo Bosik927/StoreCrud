@@ -72,9 +72,9 @@ RowVersion timestamp
 );
 
 INSERT INTO Orders(UserId, OrdareDate) VALUES
-(1,'2017-01-14 08:03:00'),
-(1,'2017-01-15 08:04:52'),
-(2,'2017-01-16 09:03:52'),
+(1,'2019-01-14 08:03:00'),
+(1,'2019-01-15 08:04:52'),
+(2,'2019-01-16 09:03:52'),
 (2,'2017-01-17 12:03:52'),
 (2,'2017-01-18 18:03:52'),
 (3,'2017-01-19 20:03:52'),
@@ -141,15 +141,15 @@ INSERT INTO Warehouse(ProductId,ExpiryDate,Quantity) VALUES
 (5,'2021-01-21',11),
 (6,'2017-01-21',57),
 (6,'2017-01-21',999),
-(7,'2017-01-21',12),
-(7,'2017-01-21',234),
-(8,'2017-01-21',567),
-(8,'2017-01-21',56),
-(9,'2017-01-21',90),
-(9,'2017-01-21',43),
+(7,'2019-01-21',12),
+(7,'2019-01-21',234),
+(8,'2019-01-21',567),
+(8,'2019-01-21',56),
+(9,'2019-01-21',90),
+(9,'2019-01-21',43),
 (10,'2017-01-21',76),
-(10,'2017-01-21',1337),
-(11,'2017-01-21',69),
+(10,'2019-01-21',1337),
+(11,'2019-01-21',69),
 (11,'2017-01-21',84),
 (11,'2019-01-21',32),
 (11,'2020-01-21',12),
@@ -383,10 +383,45 @@ begin
 end
 GO
 
-create view BestClient as
-select  from Users u
+create PROCEDURE BestClient
+@Amount int
+as
+begin 
+	select top (@Amount) u.Nick, u.PhoneNumber, u.EmailAddress, sum(Quantity*p.ProductPrice) TotalSpend from Users u
+	join Orders o on o.UserId=u.UserId
+	join OrderProduct op on op.OrderId=o.OrderId
+	join Products p on p.ProductId=op.ProductId
+	group by u.Nick, u.PhoneNumber, u.EmailAddress
+	order by TotalSpend desc
+end
+GO
 
+create PROCEDURE BestSellingProduct
+@Amount int,
+@Sold bit
+as
+begin 
+	if (@Sold=1)
+	begin
+		select top (@Amount) p.ProductName, sum(op.Quantity) Sold, p.ProductPrice, sum(Quantity*p.ProductPrice) TotalEarned from Products p
+		join OrderProduct op on op.ProductId=p.ProductId
+		join Orders o on o.OrderId=op.OrderId
+		group by p.ProductName, p.ProductPrice
+		order by Sold desc
+	end
+	else
+	begin
+		select top (@Amount) p.ProductName, sum(op.Quantity) Sold, p.ProductPrice, sum(Quantity*p.ProductPrice) TotalEarned from Products p
+		join OrderProduct op on op.ProductId=p.ProductId
+		join Orders o on o.OrderId=op.OrderId
+		group by p.ProductName, p.ProductPrice
+		order by TotalEarned desc
+	end
+end
+GO
 
+--exec BestSellingProduct 10, 0
+--exec BestClient 10
 --select * from dbo.Warehouse
 --exec SaleSummary '1990.1.1', '2020.11.1'
 --select op.Quantity, p.ProductName from OrderProduct op
