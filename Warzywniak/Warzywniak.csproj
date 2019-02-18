@@ -137,6 +137,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BestClient_Result.cs">
+      <DependentUpon>WarzywniakModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BestSellingProduct_Result.cs">
+      <DependentUpon>WarzywniakModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AdressesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrderProductsController.cs" />
@@ -281,6 +287,7 @@
     <Content Include="Views\Orders\AddProducts.cshtml" />
     <Content Include="Views\Orders\SaleSummary.cshtml" />
     <Content Include="Views\Users\BestClients.cshtml" />
+    <Content Include="Views\Products\BestSellingProduct.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -68,7 +68,7 @@
           <Property Name="ExpiryDate" Type="date" Nullable="false" />
           <Property Name="Quantity" Type="decimal" Precision="18" Scale="0" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Adresses__UserId__3F466844">
+        <Association Name="FK__Adresses__UserId__182C9B23">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Adresses" Type="Self.Adresses" Multiplicity="*" />
           <ReferentialConstraint>
@@ -80,7 +80,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderProd__Order__46E78A0C">
+        <Association Name="FK__OrderProd__Order__1FCDBCEB">
           <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
           <End Role="OrderProduct" Type="Self.OrderProduct" Multiplicity="*" />
           <ReferentialConstraint>
@@ -92,7 +92,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderProd__Produ__45F365D3">
+        <Association Name="FK__OrderProd__Produ__1ED998B2">
           <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
           <End Role="OrderProduct" Type="Self.OrderProduct" Multiplicity="*" />
           <ReferentialConstraint>
@@ -104,7 +104,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__UserId__4222D4EF">
+        <Association Name="FK__Orders__UserId__1B0907CE">
           <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
@@ -116,7 +116,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Warehouse__Produ__49C3F6B7">
+        <Association Name="FK__Warehouse__Produ__22AA2996">
           <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
           <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="*" />
           <ReferentialConstraint>
@@ -128,6 +128,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="BestClient" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Amount" Type="int" Mode="In" />
+        </Function>
+        <Function Name="BestSellingProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Amount" Type="int" Mode="In" />
+          <Parameter Name="Sold" Type="bit" Mode="In" />
+        </Function>
         <Function Name="DailyExceededExpiryDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="DeltingUsersProductsForDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetAllOrdersValueForUserId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -151,23 +158,23 @@
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Adresses__UserId__3F466844" Association="Self.FK__Adresses__UserId__3F466844">
+          <AssociationSet Name="FK__Adresses__UserId__182C9B23" Association="Self.FK__Adresses__UserId__182C9B23">
             <End Role="Users" EntitySet="Users" />
             <End Role="Adresses" EntitySet="Adresses" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderProd__Order__46E78A0C" Association="Self.FK__OrderProd__Order__46E78A0C">
+          <AssociationSet Name="FK__OrderProd__Order__1FCDBCEB" Association="Self.FK__OrderProd__Order__1FCDBCEB">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="OrderProduct" EntitySet="OrderProduct" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderProd__Produ__45F365D3" Association="Self.FK__OrderProd__Produ__45F365D3">
+          <AssociationSet Name="FK__OrderProd__Produ__1ED998B2" Association="Self.FK__OrderProd__Produ__1ED998B2">
             <End Role="Products" EntitySet="Products" />
             <End Role="OrderProduct" EntitySet="OrderProduct" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__UserId__4222D4EF" Association="Self.FK__Orders__UserId__4222D4EF">
+          <AssociationSet Name="FK__Orders__UserId__1B0907CE" Association="Self.FK__Orders__UserId__1B0907CE">
             <End Role="Users" EntitySet="Users" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Warehouse__Produ__49C3F6B7" Association="Self.FK__Warehouse__Produ__49C3F6B7">
+          <AssociationSet Name="FK__Warehouse__Produ__22AA2996" Association="Self.FK__Warehouse__Produ__22AA2996">
             <End Role="Products" EntitySet="Products" />
             <End Role="Warehouse" EntitySet="Warehouse" />
           </AssociationSet>
@@ -360,6 +367,13 @@
             <Parameter Name="BeginDate" Mode="In" Type="DateTime" />
             <Parameter Name="EndDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <FunctionImport Name="BestClient" ReturnType="Collection(WarzywniakModel.BestClient_Result)">
+            <Parameter Name="Amount" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="BestSellingProduct" ReturnType="Collection(WarzywniakModel.BestSellingProduct_Result)">
+            <Parameter Name="Amount" Mode="In" Type="Int32" />
+            <Parameter Name="Sold" Mode="In" Type="Boolean" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetAllProductsForUserId_Result">
           <Property Type="String" Name="ProductName" Nullable="false" MaxLength="69" />
@@ -388,6 +402,18 @@
           <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="38" Scale="0" />
           <Property Type="Decimal" Name="ProductPrice" Nullable="false" Precision="18" Scale="0" />
           <Property Type="Decimal" Name="Summ" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="BestClient_Result">
+          <Property Type="String" Name="Nick" Nullable="false" MaxLength="69" />
+          <Property Type="Int32" Name="PhoneNumber" Nullable="false" />
+          <Property Type="String" Name="EmailAddress" Nullable="false" MaxLength="69" />
+          <Property Type="Decimal" Name="TotalSpend" Nullable="true" Precision="38" Scale="0" />
+        </ComplexType>
+        <ComplexType Name="BestSellingProduct_Result">
+          <Property Type="String" Name="ProductName" Nullable="false" MaxLength="69" />
+          <Property Type="Decimal" Name="Sold" Nullable="true" Precision="38" Scale="0" />
+          <Property Type="Decimal" Name="ProductPrice" Nullable="false" Precision="18" Scale="0" />
+          <Property Type="Decimal" Name="TotalEarned" Nullable="true" Precision="38" Scale="0" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -494,6 +520,26 @@
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="ProductPrice" ColumnName="ProductPrice" />
                 <ScalarProperty Name="Summ" ColumnName="Summ" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="BestClient" FunctionName="WarzywniakModel.Store.BestClient">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarzywniakModel.BestClient_Result">
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="TotalSpend" ColumnName="TotalSpend" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="BestSellingProduct" FunctionName="WarzywniakModel.Store.BestSellingProduct">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WarzywniakModel.BestSellingProduct_Result">
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Sold" ColumnName="Sold" />
+                <ScalarProperty Name="ProductPrice" ColumnName="ProductPrice" />
+                <ScalarProperty Name="TotalEarned" ColumnName="TotalEarned" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

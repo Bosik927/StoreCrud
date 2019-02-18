@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Bosik\Desktop\projects\Warzywniak\Warzywniak\Warzywniak\WarzywniakModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Adam\Documents\Polibuda\Bazy Danych 2\StoreCrud\Warzywniak\WarzywniakModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

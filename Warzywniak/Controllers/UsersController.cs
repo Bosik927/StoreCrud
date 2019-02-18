@@ -253,8 +253,10 @@ namespace Warzywniak.Controllers
 
         public ActionResult BestClients(int amount)
         {
+            //amount = 10;
 
-            return View();
+            var bestClients = db.BestClient(amount);
+            return View(bestClients);
 
         }
         protected override void Dispose(bool disposing)

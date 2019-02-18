@@ -163,7 +163,15 @@ namespace Warzywniak.Controllers
 			return RedirectToAction("Index");
 		}
 
-		protected override void Dispose(bool disposing)
+        public ActionResult BestSellingProduct(int amount)
+        {
+            bool sold = false;
+            var bestSellingProduct = db.BestSellingProduct(amount, sold);
+            return View(bestSellingProduct);
+
+        }
+
+        protected override void Dispose(bool disposing)
 		{
 			if (disposing)
 			{

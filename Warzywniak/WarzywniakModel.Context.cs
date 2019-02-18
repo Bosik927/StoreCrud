@@ -113,5 +113,27 @@ namespace Warzywniak
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SaleSummaryRealizedN_Result>("SaleSummaryRealizedN", beginDateParameter, endDateParameter);
         }
+    
+        public virtual ObjectResult<BestClient_Result> BestClient(Nullable<int> amount)
+        {
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("Amount", amount) :
+                new ObjectParameter("Amount", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BestClient_Result>("BestClient", amountParameter);
+        }
+    
+        public virtual ObjectResult<BestSellingProduct_Result> BestSellingProduct(Nullable<int> amount, Nullable<bool> sold)
+        {
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("Amount", amount) :
+                new ObjectParameter("Amount", typeof(int));
+    
+            var soldParameter = sold.HasValue ?
+                new ObjectParameter("Sold", sold) :
+                new ObjectParameter("Sold", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BestSellingProduct_Result>("BestSellingProduct", amountParameter, soldParameter);
+        }
     }
 }
